@@ -11,4 +11,7 @@ curl https://raw.githubusercontent.com/rapid7/metasploit-omnibus/master/config/t
   
   
   /opt/metasploit-framework/bin/msfconsole
+  
+  
+  use exploit/unix/ftp/vsftpd_234_backdoor
 
