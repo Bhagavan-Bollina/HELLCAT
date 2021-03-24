@@ -1,0 +1,73 @@
+#!/bin/python3
+
+import sys
+import socket
+import threading
+from queue import Queue
+from datetime import datetime
+import streamlit as st
+
+st.title('Port Scanner')
+name = st.text_input("Enter URL")
+
+print_lock = threading.Lock()
+#t1 = datetime.now()
+
+# Define our target
+#if len(sys.argv) == 2:
+target = socket.gethostbyname(name)  # Translate a host name to IPV4
+start = st.number_input("Enter Start Port")
+end = st.number_input("Enter End Port")
+SP = int(start)
+print(type(SP))
+EP = int(end)
+speed = int((EP - SP) + 1)
+
+if(st.button("Scan Ports")):
+    def scan(port):
+        try:
+            s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            socket.setdefaulttimeout(1)  # is a float
+            result = s.connect_ex((target, port))  # return error indicator
+
+            if result == 0:
+                with print_lock:
+                    st.text("IP is {} and {} is open".format(target, port))
+            s.close()
+
+        except KeyboardInterrupt:
+            st.text("Exiting Program.")
+            # sys.exit()
+
+        except socket.gaierror:
+            st.text("Hostname could not be resolved.")
+            # sys.exit()
+
+        except socket.error:
+            st.text("Couldn't connect to server.")
+            # sys.exit()
+
+
+    def Threader():
+        while True:
+            worker = q.get()
+            scan(worker)
+            q.task_done()
+
+
+    q = Queue()
+
+    for i in range(speed):
+        t = threading.Thread(target=Threader)
+        t.daemon = True
+        t.start()
+
+    for x in range(SP, EP + 1):
+        q.put(x)
+
+    q.join()
+
+    # t2 = datetime.now()
+    # total = t2 - t1
+    # print ("Scanning Completed in: "+str(total))
+
