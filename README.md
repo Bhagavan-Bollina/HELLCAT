@@ -5,13 +5,5 @@ I'm using the wireshark for malware analysis from packets. Wireshark is a popula
 Malware Sample Packets taken from : https://www.malware-traffic-analysis.net/
 
 
-curl https://raw.githubusercontent.com/rapid7/metasploit-omnibus/master/config/templates/metasploit-framework-wrappers/msfupdate.erb > msfinstall && \
-  chmod 755 msfinstall && \
-  ./msfinstall
-  
-  
-  /opt/metasploit-framework/bin/msfconsole
-  
-  
-  use exploit/unix/ftp/vsftpd_234_backdoor
+
 
